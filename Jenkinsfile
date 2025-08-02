@@ -9,6 +9,9 @@ library identifier: 'jenkins-shared-library@master', retriever: modernSCM(
 
 pipeline {
     agent any
+    tools {
+    nodejs 'nodejs-24.5.0'
+    }
     environment {
         IMAGE_NAME = 'ovijmek21/react-nodejs-example:1.1'
     }
