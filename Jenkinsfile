@@ -1,26 +1,43 @@
 #!/usr/bin/env groovy
 
+library identifier: 'jenkins-shared-library@master', retriever: modernSCM(
+    [$class: 'GitSCMSource',
+    remote: 'https://github.com/Ovijmek21/jenkins-shared-repository.git',
+    credentialsId: 'github-cred'
+    ]
+)
+
 pipeline {
     agent any
+    tools {
+        maven 'maven:3.9'
+    }
+    environment {
+        IMAGE_NAME = 'ovijmek21/react-nodejs-example:1.1'
+    }
+
     stages {
-        stage('build') {
+        stage('build app') {
             steps {
-                script {
                     echo "Building the application..."
-                }
+                    buildJar()
             }
         }
-        stage('test') {
+        stage('build image') {
             steps {
                 script {
-                    echo "Testing the application..."
+                    echo "Build docker image"
+                    buildImg(env.IMAGE_NAME)
+                    dockerLogin()
+                    pushImg(env.IMAGE_NAME)
                 }
             }
         }
         stage('deploy') {
             steps {
                 script {
-                    def dockerCmd = 'docker run -p 3080:3080 -d ovijmek21/react-nodejs-example:1.0'
+                    echo 'deploy the new image'
+                    def dockerCmd = "docker run -p 3080:3080 -d '${IMAGE_NAME}'"
                     sshagent(['ec2-server-key']) {
                         sh "ssh -o StrictHostKeyChecking=no ec2-user@35.158.192.106 '${dockerCmd}'"
                     }
