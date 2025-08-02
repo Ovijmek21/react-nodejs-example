@@ -33,7 +33,7 @@ pipeline {
                         sh 'pwd'
                         sh 'ls -la'
                         sh 'cat package.json'
-                        sh 'npm install --prefix my-app'
+                        sh 'npm install'
                     }
                 }
             }
