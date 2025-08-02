@@ -9,14 +9,19 @@ library identifier: 'jenkins-shared-library@master', retriever: modernSCM(
 
 pipeline {
     agent any
-    tools {
-        maven 'maven-3.9'
-    }
     environment {
         IMAGE_NAME = 'ovijmek21/react-nodejs-example:1.1'
     }
 
     stages {
+        stage("Checkout") {
+            steps {
+                script {
+                    checkOut()
+                }
+            }
+        }
+
         stage('build app') {
             steps {
                     echo "Building the application..."
