@@ -24,7 +24,14 @@ pipeline {
                 }
             }
         }
-
+        stage('Install Dependencies') {
+            steps {
+                dir('my-app') {
+                    echo 'Installing npm dependencies in my-app directory...'
+                    sh 'npm install'
+                }
+            }
+        }
         stage('build app') {
             steps {
                     echo "Building the application..."
