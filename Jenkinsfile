@@ -28,13 +28,11 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 script {
-                    dir('my-app') {
                         echo "Verifying directory and package.json"
                         sh 'pwd'
                         sh 'ls -la'
                         sh 'cat package.json'
                         sh 'npm install'
-                    }
                 }
             }
         }
